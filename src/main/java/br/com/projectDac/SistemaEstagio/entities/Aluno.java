@@ -15,7 +15,7 @@ import org.springframework.lang.NonNull;
 @Entity
 @Table(name = "Aluno")
 public class Aluno {
-     
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long matricula;
@@ -28,6 +28,12 @@ public class Aluno {
 	@NonNull 
 	@Column(length = 40, nullable = false)
 	private String senha;
+
+    @ManyToOne
+    private Empresa empresa;
+
+    @ManyToOne
+    private Orientador orientador;
 
 
     public Long getId() {
