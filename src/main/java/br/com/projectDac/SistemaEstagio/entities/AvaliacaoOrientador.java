@@ -54,7 +54,6 @@ public class AvaliacaoOrientador {
     public void setOrientador(Orientador orientador) {
         this.orientador = orientador;
     }
-    	
     
     @Override
 	public int hashCode() {

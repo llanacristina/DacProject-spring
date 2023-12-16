@@ -30,7 +30,6 @@ public class AvaliacaoEmpresa {
     private String aprendizagem;
     private String desempenho;
 
-
     public Long getId() {
         return id;
     }
