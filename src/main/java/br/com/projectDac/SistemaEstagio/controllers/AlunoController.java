@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.projectDac.SistemaEstagio.entities.Aluno;
+import br.com.projectDac.SistemaEstagio.entities.Empresa;
+import br.com.projectDac.SistemaEstagio.entities.Orientador;
 import br.com.projectDac.SistemaEstagio.repositories.AlunoRepository;
+import br.com.projectDac.SistemaEstagio.repositories.EmpresaRepository;
+import br.com.projectDac.SistemaEstagio.repositories.OrientadorRepository;
 
 @RestController
 @RequestMapping("/alunos")
@@ -24,13 +28,46 @@ public class AlunoController {
 
     @Autowired
     private AlunoRepository alunoRepository;
+    
+    @Autowired
+    private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private OrientadorRepository orientadorRepository;
 
     //CRIA ESTUDANTE
      @PostMapping
-    public ResponseEntity<Aluno> createStudent(@Validated @RequestBody Aluno aluno) {
+    public ResponseEntity<Object> createStudent(@Validated @RequestBody Aluno aluno) {
+         try {
+        // Verifica se IDs de empresa e orientador estão presentes na requisição
+        Long idEmpresa = aluno.getEmpresa() != null ? aluno.getEmpresa().getId() : null;
+        Long idOrientador = aluno.getOrientador() != null ? aluno.getOrientador().getId() : null;
+
+        // Se IDs estiverem presentes, verifica e associa os objetos Empresa e Orientador
+        if (idEmpresa != null) {
+            Empresa empresa = empresaRepository.findById(idEmpresa).orElse(null);
+            if (empresa == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID de empresa inválido.");
+            }
+            aluno.setEmpresa(empresa);
+        }
+
+        if (idOrientador != null) {
+            Orientador orientador = orientadorRepository.findById(idOrientador).orElse(null);
+            if (orientador == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID de orientador inválido.");
+            }
+            aluno.setOrientador(orientador);
+        }
+
+        // Salva o aluno no banco de dados
         Aluno newStudent = alunoRepository.save(aluno);
         return ResponseEntity.status(HttpStatus.CREATED).body(newStudent);
+    
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar estudante.");
     }
+}
 
     //LISTA ESTUDANTES
       @GetMapping

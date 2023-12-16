@@ -1,12 +1,14 @@
 package br.com.projectDac.SistemaEstagio.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.lang.NonNull;
@@ -28,6 +30,9 @@ public class Empresa implements Serializable {
     @NonNull 
     @Column(length = 40, nullable = false)
     private String senha;
+
+	@OneToMany(mappedBy = "empresa")
+    private List<Aluno> alunos;
 
     public Long getId() {
         return id;

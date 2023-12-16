@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.springframework.lang.NonNull;
 
 
@@ -30,9 +29,11 @@ public class Aluno {
 	private String senha;
 
     @ManyToOne
+    @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 
     @ManyToOne
+    @JoinColumn(name = "orientador_id")
     private Orientador orientador;
 
 
@@ -70,6 +71,23 @@ public class Aluno {
 	public void setMatricula(Long matricula) {
 		this.matricula = matricula;
 	}
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Orientador getOrientador() {
+        return orientador;
+    }
+
+    public void setOrientador(Orientador orientador) {
+        this.orientador = orientador;
+    }
+
 
     @Override
     public int hashCode() {
